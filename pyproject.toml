@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "datalynx"
 version = "0.1.0"
-description = "Fast, extensible record matching and data reconciliation for Python."
+description = "Check whether records match on selected fields."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
