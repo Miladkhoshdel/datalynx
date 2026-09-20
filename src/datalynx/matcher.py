@@ -1,4 +1,9 @@
 def record_exists(record: dict, records: list[dict], fields: list[str]) -> bool:
+    """Return whether any record matches on every specified field.
+
+    Raise ValueError if no fields are provided, or KeyError if the input record
+    lacks a specified field. Candidate records missing a field do not match.
+    """
     if not fields:
         raise ValueError("Provide at least one matching field")
 
