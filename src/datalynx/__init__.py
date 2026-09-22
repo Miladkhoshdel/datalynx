@@ -1,1 +1,1 @@
-from .matcher import record_exists
+from .matcher import find_matching_record, record_exists
