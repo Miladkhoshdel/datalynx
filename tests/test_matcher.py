@@ -1,6 +1,47 @@
 import pytest
 
-from datalynx import record_exists
+from datalynx import find_matching_record, record_exists
+
+
+def test_find_matching_record_returns_first_matching_record():
+    first = {"id": 90, "amount": 100, "date": "2026-09-18"}
+    second = {"id": 91, "amount": 100, "date": "2026-09-18"}
+    records = [{"id": 89, "amount": 100, "date": "2026-09-19"}, first, second]
+
+    assert find_matching_record(
+        {"id": 1, "amount": 100, "date": "2026-09-18"},
+        records,
+        ["amount", "date"],
+    ) is first
+
+
+def test_find_matching_record_returns_none_when_fields_match_different_records():
+    records = [
+        {"amount": 100, "date": "2026-09-18"},
+        {"amount": 200, "date": "2026-09-19"},
+    ]
+
+    assert find_matching_record(
+        {"amount": 100, "date": "2026-09-19"}, records, ["amount", "date"]
+    ) is None
+
+
+def test_find_matching_record_skips_candidate_with_missing_field():
+    match = {"id": 2, "status": "pending"}
+
+    assert find_matching_record(
+        {"status": "pending"}, [{"id": 1}, match], ["status"]
+    ) is match
+
+
+def test_find_matching_record_rejects_empty_fields():
+    with pytest.raises(ValueError, match="at least one matching field"):
+        find_matching_record({"id": 1}, [{"id": 1}], [])
+
+
+def test_find_matching_record_raises_when_input_record_lacks_field():
+    with pytest.raises(KeyError, match="status"):
+        find_matching_record({"id": 1}, [{"status": "pending"}], ["status"])
 
 
 def test_record_exists_with_multiple_fields():
