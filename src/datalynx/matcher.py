@@ -1,5 +1,7 @@
-def record_exists(record: dict, records: list[dict], fields: list[str]) -> bool:
-    """Return whether any record matches on every specified field.
+def find_matching_record(
+    record: dict, records: list[dict], fields: list[str]
+) -> dict | None:
+    """Return the first record matching on every specified field, or None.
 
     Raise ValueError if no fields are provided, or KeyError if the input record
     lacks a specified field. Candidate records missing a field do not match.
@@ -18,6 +20,11 @@ def record_exists(record: dict, records: list[dict], fields: list[str]) -> bool:
                 break
 
         if matches:
-            return True
+            return candidate
 
-    return False
+    return None
+
+
+def record_exists(record: dict, records: list[dict], fields: list[str]) -> bool:
+    """Return whether any record matches on every specified field."""
+    return find_matching_record(record, records, fields) is not None
